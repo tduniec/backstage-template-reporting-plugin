@@ -16,6 +16,7 @@ https://github.com/tduniec/backstage-template-reporting-plugin.git
 ![Screenshot of the AllStats2 plugin Charts](https://raw.githubusercontent.com/tduniec/backstage-timesaver-plugin/main/plugins/time-saver/docs/tsAllStats2.png)
 ![Screenshot of the ByTeam plugin Charts](https://raw.githubusercontent.com/tduniec/backstage-timesaver-plugin/main/plugins/time-saver/docs/tsByTeam.png)
 ![Screenshot of the ByTemplate plugin Charts](https://raw.githubusercontent.com/tduniec/backstage-timesaver-plugin/main/plugins/time-saver/docs/tsByTemplate.png)
+
 ## Installation
 
 1. Install the plugin package in your Backstage app:
@@ -29,27 +30,31 @@ yarn add --cwd packages/app @tduniec/backstage-plugin-template-reporting
 3. Then after all the import statements add the following line:
 
    ```ts
-    import { TemplateReportingPage } from '@tduniec/plugin-template-reporting';
+   import { TemplateReportingPage } from '@tduniec/plugin-template-reporting';
    ```
 
-1. In this same file just before the closing `</ FlatRoutes>`, this will be near the bottom of the file, add this line:
+4. In this same file just before the closing `</ FlatRoutes>`, this will be near the bottom of the file, add this line:
 
    ```ts
    <Route path="/template-reporting" element={<TemplateReportingPage />} />
    ```
 
-2. Next open the `packages/app/src/components/Root/Root.tsx` file
-3. We want to add this icon import after all the existing import statements:
+5. Next open the `packages/app/src/components/Root/Root.tsx` file
+6. We want to add this icon import after all the existing import statements:
 
    ```ts
    import SummarizeIcon from '@mui/icons-material/Summarize';
    ```
 
-4. Then add this line just after the `<SidebarSettings />` line:
+7. Then add this line just after the `<SidebarSettings />` line:
 
    ```ts
-   <SidebarItem icon={SummarizeIcon} to="template-reporting" text="templateReporting" />
+   <SidebarItem
+     icon={SummarizeIcon}
+     to="template-reporting"
+     text="templateReporting"
+   />
    ```
 
-5. Now run `yarn dev` from the root of your project and you should see the DevTools option show up just below Settings in your sidebar and clicking on it will get you to the [Info tab](#info)
-6. Install [template-reporting-backend](../template-reporting-backend/README.md) part if not installed already
+8. Now run `yarn dev` from the root of your project and you should see the DevTools option show up just below Settings in your sidebar and clicking on it will get you to the [Info tab](#info)
+9. Install [template-reporting-backend](../template-reporting-backend/README.md) part if not installed already

@@ -1,6 +1,6 @@
 # Template Reporting - backend
 
-The Backstage Template-Reporting Plugin is designed to generate reports from template executions within Backstage. It offers high customization, allowing any template to be used with the Nunjucks templating engine. The plugin renders the final reports in a visually appealing format using Markdown, making it versatile for various reporting needs. This part of plugin is `backend` part. 
+The Backstage Template-Reporting Plugin is designed to generate reports from template executions within Backstage. It offers high customization, allowing any template to be used with the Nunjucks templating engine. The plugin renders the final reports in a visually appealing format using Markdown, making it versatile for various reporting needs. This part of plugin is `backend` part.
 
 ## Dependencies
 
@@ -26,7 +26,9 @@ import { createRouter } from '@tduniec/backstage-plugin-template-reporting-backe
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 
-export default async function createPlugin(env: PluginEnvironment,): Promise<Router> {
+export default async function createPlugin(
+  env: PluginEnvironment,
+): Promise<Router> {
   return await createRouter({
     logger: env.logger,
     database: env.database,
@@ -62,11 +64,11 @@ backend.add(import('@tduniec/backstage-plugin-template-reporting-backend'));
 
 3. Install [template-reporting](../template-reporting/README.md) part if not installed already
 
-## Adding Custom Report Template 
+## Adding Custom Report Template
 
 Modify plugin configuration in `templateReporting.ts` file in `packages/backend/src/plugins/`:
 
-```diff 
+```diff
 
 export default async function createPlugin(env: PluginEnvironment,): Promise<Router> {
   return await createRouter({
@@ -86,18 +88,16 @@ export default async function createPlugin(env: PluginEnvironment,): Promise<Rou
 + | {{ item.stepName }} | [{{item.stepOutput}}]({{ item.stepOutput }}) | {{ item.nextStep }} |
 + {% endfor %}
 + `}
-+ 
++
 + const reportTemplates: TemplateReportObj[] = [
 +   reportTemplateAdded
 + ]
 
 ```
 
-
-
 ## Custom Action
 
- Wire up the Custom Action to your Scaffolder actions list in file in `packages/backend/src/plugins/scaffolder.ts`:
+Wire up the Custom Action to your Scaffolder actions list in file in `packages/backend/src/plugins/scaffolder.ts`:
 
 ```diff
 + import { generateTemplateReport } from '@tduniec/plugin-template-reporting-backend';
@@ -110,32 +110,30 @@ export default async function createPlugin(env: PluginEnvironment,): Promise<Rou
   ];
 ```
 
-
-### Custom action usage in template 
-
+### Custom action usage in template
 
 ```yaml
-...
-  steps:
+---
+steps:
   - id: generate-report
     action: template:report:generate
     name: Generate report for template
     input:
       reportInputs:
         outputs:
-        - stepName: Step1
-          stepOutput: https://google.com
-          nextStep: Step2
-        - stepName: Step2
-          stepOutput: https://amazon.com
-          nextStep: verify report
+          - stepName: Step1
+            stepOutput: https://google.com
+            nextStep: Step2
+          - stepName: Step2
+            stepOutput: https://amazon.com
+            nextStep: verify report
       reportTemplateName: 'dummyTemplate' #optional -> if you want to use your custom report template, if not specified the default report template will be taken
 
-  output:
-    links:
-      - title: Template Report
-        icon: catalog
-        url: ${{ steps['generate-report'].output.reportUrl }}
+output:
+  links:
+    - title: Template Report
+      icon: catalog
+      url: ${{ steps['generate-report'].output.reportUrl }}
 ```
 
 ### Default Report Template
@@ -144,49 +142,55 @@ It comes with build in report Template
 
 ```md
 ## Generated report for template: '{{ templateName }}'
+
 #### Generated on **{{ time }}**
+
 ---
-Template Execution Id:  **{{ templateExecutionId }}**
+
+Template Execution Id: **{{ templateExecutionId }}**
 
 This report provides an overview of the execution of template actions in Backstage Scaffolder.
 
 | Step Name | Step Output | Next Steps |
-| :-------|:--------:|--------:|
+| :-------- | :---------: | ---------: |
+
 {% for item in outputs -%}
 | {{ item.stepName }} | [{{ item.stepOutput }}]({{ item.stepOutput }}) | {{ item.nextStep }} |
 {% endfor %}
+
 ### Further Actions
+
 ---
+
 After the successful execution, the following steps need to be done as these steps are not done in the template execution
 {% for item in furtherActions %}
 {{ item }}
 {% endfor %}`
-
 ```
 
-This one can be used with this action: 
+This one can be used with this action:
 
 ```yaml
-...
-  steps:
+---
+steps:
   - id: generate-report
     action: template:report:generate
     name: Generate report for template
     input:
       reportInputs:
         outputs:
-        - stepName: My Dummy Step1
-          stepOutput: https://google.com
-          nextStep: todo1
-        - stepName: My Dummy Step2
-          stepOutput: https://amazon.com
-          nextStep: todo2
+          - stepName: My Dummy Step1
+            stepOutput: https://google.com
+            nextStep: todo1
+          - stepName: My Dummy Step2
+            stepOutput: https://amazon.com
+            nextStep: todo2
         furtherActions:
-        - 1. Upload the image to ECR production
-        - 2. Prepare release
-  output:
-    links:
-      - title: Template Report
-        icon: catalog
-        url: ${{ steps['generate-report'].output.reportUrl }}
+          - 1. Upload the image to ECR production
+          - 2. Prepare release
+output:
+  links:
+    - title: Template Report
+      icon: catalog
+      url: ${{ steps['generate-report'].output.reportUrl }}
 ```
