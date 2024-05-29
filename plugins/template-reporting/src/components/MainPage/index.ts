@@ -1,1 +1,1 @@
-export { ExampleComponent } from './MainPage';
+export { MainPage } from './MainPage';

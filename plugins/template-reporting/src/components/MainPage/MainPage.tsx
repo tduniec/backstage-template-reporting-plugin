@@ -3,7 +3,7 @@ import { FormControlLabel, FormGroup, Grid, Switch } from '@material-ui/core';
 import TemplateReportList from '../ListOfReports/ListOfReports';
 import { Layout } from '../Layout/Layout';
 
-export const ExampleComponent = () => {
+export const MainPage = () => {
   const [showAllReports, setShowAllReports] = useState(false);
 
   // Step 3: Handle switch change
