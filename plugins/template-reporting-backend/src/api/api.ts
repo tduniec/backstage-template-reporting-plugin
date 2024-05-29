@@ -32,24 +32,24 @@ export class TrApi {
   private readonly db: DatabaseOperations;
   private readonly trTableName = 'tr_template_reports';
 
-  //TODO:
+  // TODO:
   // prepare custom action to collect yaml as input
 
   public async getTemplateReportsById(id: string) {
     this.logger.debug(`Collecting Template Report object for id: ${id}`);
-    var obj = (await this.db.select(this.trTableName, '*', { id: id }))[0];
+    const obj = (await this.db.select(this.trTableName, '*', { id: id }))[0];
     return obj;
   }
 
   public async getTemplateReportsByUser(user: string) {
     this.logger.debug(`Collecting Template Report object for user: ${user}`);
-    var obj = await this.db.select(this.trTableName, '*', { created_by: user });
+    const obj = await this.db.select(this.trTableName, '*', { created_by: user });
     return obj;
   }
 
   public async getTemplateReports() {
     this.logger.debug(`Collecting Template Report - all`);
-    var obj = await this.db.selectAll(this.trTableName, '*');
+    const obj = await this.db.selectAll(this.trTableName, '*');
     return obj;
   }
 
@@ -58,9 +58,9 @@ export class TrApi {
       `Generating report for templateTask: ${templateReportBody.templateExecutionId}`,
     );
 
-    templateReportBody.templateInputs['templateExecutionId'] =
+    templateReportBody.templateInputs.templateExecutionId =
       templateReportBody.templateExecutionId;
-    templateReportBody.templateInputs['templateName'] =
+    templateReportBody.templateInputs.templateName =
       templateReportBody.templateName;
     this.renderDefaultValues(templateReportBody.templateInputs);
 
@@ -69,7 +69,7 @@ export class TrApi {
       templateReportBody.templateReportTemplateName,
     );
 
-    var redneredTemplate = nunjucks.renderString(
+    const redneredTemplate = nunjucks.renderString(
       templateReportToRender.content,
       templateReportBody.templateInputs,
     );
@@ -91,13 +91,13 @@ export class TrApi {
     )[0];
   }
 
-  private renderDefaultValues(templateValuesObject: any) {
+  private renderDefaultValues(templateValuesObject: object) {
     const getCurrentUTCTime = (): string => {
       const now = new Date();
       return now.toDateString();
     };
 
-    templateValuesObject['time'] = getCurrentUTCTime();
+    templateValuesObject.time = getCurrentUTCTime();
   }
 
   private async selectTemplateToRender(
@@ -107,8 +107,8 @@ export class TrApi {
     const foundObject = objects.find(obj => obj.name === name);
     if (foundObject) {
       return foundObject;
-    } else {
+    } 
       return defaultTemplate;
-    }
+    
   }
 }
