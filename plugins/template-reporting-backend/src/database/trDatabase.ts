@@ -22,7 +22,7 @@ import { ConfigReader } from '@backstage/config';
 import { Knex } from 'knex';
 
 const migrationsDir = resolvePackagePath(
-  '@tduniec/plugin-template-reporting-backend',
+  '@tduniec/backstage-plugin-template-reporting-backend',
   'migrations',
 );
 
