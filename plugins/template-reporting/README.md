@@ -30,13 +30,14 @@ yarn add --cwd packages/app @tduniec/backstage-plugin-template-reporting
 3. Then after all the import statements add the following line:
 
    ```ts
-   import { TemplateReportingPage } from '@tduniec/plugin-template-reporting';
+   import { TemplateReportsPage, TemplateReportPage } from '@tduniec/backsatge-plugin-template-reports';
    ```
 
 4. In this same file just before the closing `</ FlatRoutes>`, this will be near the bottom of the file, add this line:
 
    ```ts
-   <Route path="/template-reporting" element={<TemplateReportingPage />} />
+      <Route path="/template-reporting" element={<TemplateReportsPage />} />
+      <Route path="/template-reporting/:id" element={<SingleReportPage />} />
    ```
 
 5. Next open the `packages/app/src/components/Root/Root.tsx` file
