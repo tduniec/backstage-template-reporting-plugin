@@ -61,7 +61,7 @@ export interface TemplateReportingReportsExtensionPoint {
   addReports(...templateReports: TemplateReportObj[]): void;
 }
 
-export const templateReportinReportsExtensionPoint =
+export const templateReportingReportsExtensionPoint =
   createExtensionPoint<TemplateReportingReportsExtensionPoint>({
     id: 'templateReporting.reportTemplates',
   });
@@ -70,7 +70,7 @@ export const templateReportingPlugin = createBackendPlugin({
   pluginId: 'template-reporting',
   register(env) {
     const addedReportTemplates = new Array<TemplateReportObj>();
-    env.registerExtensionPoint(templateReportinReportsExtensionPoint, {
+    env.registerExtensionPoint(templateReportingReportsExtensionPoint, {
       addReports(...newTemplateReports: TemplateReportObj[]) {
         addedReportTemplates.push(...newTemplateReports);
       },

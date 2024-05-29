@@ -52,16 +52,6 @@ apiRouter.use('/template-reporting', await templateReporting(templateReportingEn
 
 ```
 
-### New Backend - instalation
-
-2. Wire up the plugin in Backstage new backend system
-
-in `packages/backend/src/index.ts`
-
-```ts
-backend.add(import('@tduniec/backstage-plugin-template-reporting-backend'));
-```
-
 3. Install [template-reporting](../template-reporting/README.md) part if not installed already
 
 ## Adding Custom Report Template
@@ -193,4 +183,56 @@ output:
     - title: Template Report
       icon: catalog
       url: ${{ steps['generate-report'].output.reportUrl }}
+```
+
+### New Backend - instalation
+
+2. Wire up the plugin in Backstage new backend system
+
+in `packages/backend/src/index.ts`
+
+```ts
+backend.add(import('@tduniec/backstage-plugin-template-reporting-backend'));
+```
+
+## register custom Report Templates
+
+```ts
+import { createBackendModule } from '@backstage/backend-plugin-api';
+import {
+  TemplateReportObj,
+  templateReportingReportsExtensionPoint,
+} from '@tduniec/plugin-template-reporting-backend';
+```
+
+...
+
+```ts
+const reportTemplateAdded: TemplateReportObj = {
+  name: 'dummyTemplate',
+  content: `
+ ### This is dummy template for {{ templateExecutionId }} and template name : {{ templateName }}
+ | Step Name | Step Output | Next Steps |
+ | :-------|:--------:|--------:|
+ {% for item in outputs -%}
+ | {{ item.stepName }} | [{{item.stepOutput}}]({{ item.stepOutput }}) | {{ item.nextStep }} |
+ {% endfor %}
+ `,
+};
+
+const templateReportingCustomExtensions = createBackendModule({
+  pluginId: 'template-reporting',
+  moduleId: 'custom-template-report',
+  register(env) {
+    env.registerInit({
+      deps: {
+        templateReporting: templateReportingReportsExtensionPoint,
+      },
+      async init({ templateReporting }) {
+        templateReporting.addReports(reportTemplateAdded); // just an example
+      },
+    });
+  },
+});
+backend.add(templateReportingCustomExtensions());
 ```

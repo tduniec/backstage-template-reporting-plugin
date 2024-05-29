@@ -1,5 +1,5 @@
 {
-  "name": "@tduniec/plugin-template-reporting-backend",
+  "name": "@tduniec/backstage-plugin-template-reporting-backend",
   "version": "0.0.1",
   "main": "src/index.ts",
   "types": "src/index.ts",
