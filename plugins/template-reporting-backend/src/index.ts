@@ -21,7 +21,7 @@ export type ErrorRepresentation = {
 };
 
 export type TemplateReport = {
-  templateInputs: object;
+  templateInputs: any;
   templateReportTemplateName?: string;
   templateName: string;
   createdBy: string;

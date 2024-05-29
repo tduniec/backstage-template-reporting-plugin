@@ -21,7 +21,7 @@ import { Config } from '@backstage/config';
 import * as yaml from 'yaml';
 import { TemplateReport } from '../..';
 
-function _interopDefaultLegacy(e: object) {
+function _interopDefaultLegacy(e: any) {
   return e && typeof e === 'object' && 'default' in e ? e : { default: e };
 }
 const yaml__default = /* #__PURE__*/ _interopDefaultLegacy(yaml);

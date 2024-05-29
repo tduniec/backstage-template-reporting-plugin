@@ -38,7 +38,7 @@ const DataFetchingComponent: React.FC<DataFetchingComponentProps> = ({
             jsonData.template_task_id,
           );
           setScaffolderObj(scaffolderTask);
-        } catch (error: any) {
+        } catch (err) {
           setScaffolderObj({ status: 'NOT FOUND' });
         }
         const ren = new MarkdownIt().renderer.render(
@@ -49,7 +49,7 @@ const DataFetchingComponent: React.FC<DataFetchingComponentProps> = ({
 
         setData(ren);
         setFullReport(jsonData);
-      } catch (error: any) {
+      } catch (err) {
         setError(error);
       } finally {
         setLoading(false);
@@ -57,7 +57,7 @@ const DataFetchingComponent: React.FC<DataFetchingComponentProps> = ({
     };
 
     fetchData();
-  }, [templateReportId, configApi]);
+  }, [scaffolderApi, templateReportId, configApi, error]);
 
   if (loading) {
     return <Typography variant="h6">Loading...</Typography>;

@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Container,
-  CircularProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Typography,
-} from '@mui/material';
+
 import {
   configApiRef,
   identityApiRef,
   useApi,
 } from '@backstage/core-plugin-api';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import TableContainer from '@mui/material/TableContainer';
+import Table from '@mui/material/Table';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import TableBody from '@mui/material/TableBody';
+import Paper from '@mui/material/Paper';
 
 interface TemplateReport {
   id: string;
@@ -41,7 +40,7 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
     const fetchData = async () => {
       try {
         const userId = (await identityApi.getBackstageIdentity()).userEntityRef;
-        var response;
+        let response;
         if (!byUser) {
           response = await fetch(
             `${configApi.getString(
@@ -60,7 +59,7 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
         }
         const result: TemplateReport[] = await response.json();
         setData(result);
-      } catch (error) {
+      } catch (err) {
         setError(error as Error);
       } finally {
         setLoading(false);
@@ -68,7 +67,7 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
     };
 
     fetchData();
-  }, [byUser]);
+  }, [configApi, identityApi, byUser, error]);
 
   if (loading) {
     return <CircularProgress />;

@@ -43,7 +43,9 @@ export class TrApi {
 
   public async getTemplateReportsByUser(user: string) {
     this.logger.debug(`Collecting Template Report object for user: ${user}`);
-    const obj = await this.db.select(this.trTableName, '*', { created_by: user });
+    const obj = await this.db.select(this.trTableName, '*', {
+      created_by: user,
+    });
     return obj;
   }
 
@@ -91,7 +93,7 @@ export class TrApi {
     )[0];
   }
 
-  private renderDefaultValues(templateValuesObject: object) {
+  private renderDefaultValues(templateValuesObject: any) {
     const getCurrentUTCTime = (): string => {
       const now = new Date();
       return now.toDateString();
@@ -107,8 +109,7 @@ export class TrApi {
     const foundObject = objects.find(obj => obj.name === name);
     if (foundObject) {
       return foundObject;
-    } 
-      return defaultTemplate;
-    
+    }
+    return defaultTemplate;
   }
 }
