@@ -30,7 +30,10 @@ yarn add --cwd packages/app @tduniec/backstage-plugin-template-reporting
 3. Then after all the import statements add the following line:
 
    ```ts
-   import { TemplateReportsPage, TemplateReportPage } from '@tduniec/backsatge-plugin-template-reports';
+   import {
+     TemplateReportsPage,
+     TemplateReportPage,
+   } from '@tduniec/backsatge-plugin-template-reports';
    ```
 
 4. In this same file just before the closing `</ FlatRoutes>`, this will be near the bottom of the file, add this line:

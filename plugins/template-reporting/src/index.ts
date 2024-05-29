@@ -1,1 +1,5 @@
-export { templateReportsPlugin, TemplateReportsPage, TemplateReportPage } from './plugin';
+export {
+  templateReportsPlugin,
+  TemplateReportsPage,
+  TemplateReportPage,
+} from './plugin';
