@@ -114,5 +114,4 @@ export class DatabaseOperations {
         this.logger.error(`Error truncating table ${tableName}`, error);
       });
   }
-
 }

@@ -1,4 +1,7 @@
-import { createPlugin, createRoutableExtension } from '@backstage/core-plugin-api';
+import {
+  createPlugin,
+  createRoutableExtension,
+} from '@backstage/core-plugin-api';
 
 import { rootRouteRef, singleReportPage } from './routes';
 
@@ -22,8 +25,9 @@ export const TemplateReportPage = templateReportsPlugin.provide(
   createRoutableExtension({
     name: 'TemplateReportPage',
     component: () =>
-      import('./components/SingleReportComponent').then(m => m.SingleReportPage),
+      import('./components/SingleReportComponent').then(
+        m => m.SingleReportPage,
+      ),
     mountPoint: singleReportPage,
   }),
 );
-

@@ -9,56 +9,53 @@ function _interopDefaultLegacy(e: any) {
 }
 var yaml__default = /*#__PURE__*/ _interopDefaultLegacy(yaml);
 
-
 /**
  *
  * @remarks
  *
  *
  * @public
- * 
+ *
  */
 
-const actionId = 'template:report:generate' //here is action id used later in the file
+const actionId = 'template:report:generate'; //here is action id used later in the file
 const exampleUsage = [
   {
-    description: "Generate report for template",
-    example: yaml__default["default"].stringify({
+    description: 'Generate report for template',
+    example: yaml__default['default'].stringify({
       steps: [
         {
-          id: "generate-report",
+          id: 'generate-report',
           action: actionId,
           name: 'Generate report for template',
           input: {
             reportInputs: {
-              hello: 'World!'
+              hello: 'World!',
             },
-            reportTemplateName: 'dummyTemplate'
-          }
-        }
-      ]
-    })
+            reportTemplateName: 'dummyTemplate',
+          },
+        },
+      ],
+    }),
   },
   {
-    description: "Generate report for template",
-    example: yaml__default["default"].stringify({
+    description: 'Generate report for template',
+    example: yaml__default['default'].stringify({
       steps: [
         {
-          id: "generate-report",
+          id: 'generate-report',
           action: actionId,
           name: 'Generate report for template',
           input: {
             reportInputs: {
-              hello: 'World!'
-            }
-          }
-        }
-      ]
-    })
+              hello: 'World!',
+            },
+          },
+        },
+      ],
+    }),
   },
-
 ];
-
 
 export function generateTemplateReport(config: Config) {
   // For more information on how to define custom actions, see
@@ -66,7 +63,7 @@ export function generateTemplateReport(config: Config) {
 
   return createTemplateAction<{
     reportInputs: any;
-    reportTemplateName?: string
+    reportTemplateName?: string;
   }>({
     id: actionId,
     examples: exampleUsage,
@@ -75,61 +72,64 @@ export function generateTemplateReport(config: Config) {
       input: {
         type: 'object',
         required: ['reportInputs'],
-        properties: inputProps
+        properties: inputProps,
       },
       output: {
         type: 'object',
-        properties: outputProps
+        properties: outputProps,
       },
     },
     async handler(ctx) {
       const logger = ctx.logger;
-      const { reportTemplateName, reportInputs } = ctx.input
-      const taskId = ctx.workspacePath.split('/').pop()
+      const { reportTemplateName, reportInputs } = ctx.input;
+      const taskId = ctx.workspacePath.split('/').pop();
 
       const body: any = {
         templateName: ctx.templateInfo?.entity?.metadata.name,
         templateExecutionId: taskId,
         templateReportTemplateName: reportTemplateName,
         createdBy: ctx.user?.ref,
-        templateInputs: reportInputs
-      }
-      logger.info(`Publishing report for template execution: ${taskId}`)
+        templateInputs: reportInputs,
+      };
+      logger.info(`Publishing report for template execution: ${taskId}`);
 
       try {
         const response = await fetch(
           `http://127.0.0.1:7007/api/template-reporting/report`,
           {
-            method: "POST",
+            method: 'POST',
             headers: {
-              'Authorization': `Bearer ${ctx.secrets?.backstageToken}`,
-              'Content-Type': 'application/json'
-          },
-            body: JSON.stringify(body)
+              Authorization: `Bearer ${ctx.secrets?.backstageToken}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
           },
         );
         if (response.ok) {
           console.log(response);
-          var responseJson = null
+          var responseJson = null;
           try {
             responseJson = await response.json();
           } catch (error) {
-            return
+            return;
           }
           console.log(responseJson);
-          ctx.output('reportUrl', `${config.getString('app.baseUrl')}/template-reporting/${responseJson.id}`)
+          ctx.output(
+            'reportUrl',
+            `${config.getString('app.baseUrl')}/template-reporting/${
+              responseJson.id
+            }`,
+          );
         } else {
           ctx.logger.error(
             `problem retriving proper response: ${JSON.stringify(
-              response.status)}: ${response.statusText}`)
+              response.status,
+            )}: ${response.statusText}`,
+          );
         }
       } catch (error) {
-        ctx.logger.error(
-          `problem retriving proper response`,
-        );
+        ctx.logger.error(`problem retriving proper response`);
       }
-
-    }
+    },
   });
 }
-

@@ -1,8 +1,8 @@
-import { TemplateReportObj } from "..";
+import { TemplateReportObj } from '..';
 
 export const defaultTemplate: TemplateReportObj = {
-    name: 'defaultTemplate',
-    content: `
+  name: 'defaultTemplate',
+  content: `
 ## Generated report for template: '{{ templateName }}'
 #### Generated on **{{ time }}**
 ---
@@ -20,5 +20,5 @@ This report provides an overview of the execution of template actions in Backsta
 After the successful execution, the following steps need to be done as these steps are not done in the template execution
 {% for item in furtherActions %}
 {{ item }}
-{% endfor %}`
-}
+{% endfor %}`,
+};

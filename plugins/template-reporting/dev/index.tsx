@@ -7,6 +7,6 @@ createDevApp()
   .addPage({
     element: <TemplateReportsPage />,
     title: 'Root Page',
-    path: '/template-reporting'
+    path: '/template-reporting',
   })
   .render();

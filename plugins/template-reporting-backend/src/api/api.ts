@@ -16,83 +16,99 @@
 import { Logger } from 'winston';
 import { Knex } from 'knex';
 import { DatabaseOperations } from '../database/databaseOperations';
-import nunjucks from 'nunjucks'
+import nunjucks from 'nunjucks';
 import { defaultTemplate } from '../reportTemplates/reportTemplates';
 import MarkdownIt from 'markdown-it';
 import { TemplateReport, TemplateReportObj } from '..';
 
-
 export class TrApi {
-    constructor(
-        private readonly logger: Logger,
-        knex: Knex,
-        private readonly customReportTemplates: TemplateReportObj[] = []
-    ) {
-        this.db = new DatabaseOperations(knex, logger);
+  constructor(
+    private readonly logger: Logger,
+    knex: Knex,
+    private readonly customReportTemplates: TemplateReportObj[] = [],
+  ) {
+    this.db = new DatabaseOperations(knex, logger);
+  }
+  private readonly db: DatabaseOperations;
+  private readonly trTableName = 'tr_template_reports';
 
+  //TODO:
+  // prepare custom action to collect yaml as input
+
+  public async getTemplateReportsById(id: string) {
+    this.logger.debug(`Collecting Template Report object for id: ${id}`);
+    var obj = (await this.db.select(this.trTableName, '*', { id: id }))[0];
+    return obj;
+  }
+
+  public async getTemplateReportsByUser(user: string) {
+    this.logger.debug(`Collecting Template Report object for user: ${user}`);
+    var obj = await this.db.select(this.trTableName, '*', { created_by: user });
+    return obj;
+  }
+
+  public async getTemplateReports() {
+    this.logger.debug(`Collecting Template Report - all`);
+    var obj = await this.db.selectAll(this.trTableName, '*');
+    return obj;
+  }
+
+  public async generateReportForTask(templateReportBody: TemplateReport) {
+    this.logger.info(
+      `Generating report for templateTask: ${templateReportBody.templateExecutionId}`,
+    );
+
+    templateReportBody.templateInputs['templateExecutionId'] =
+      templateReportBody.templateExecutionId;
+    templateReportBody.templateInputs['templateName'] =
+      templateReportBody.templateName;
+    this.renderDefaultValues(templateReportBody.templateInputs);
+
+    const templateReportToRender = await this.selectTemplateToRender(
+      this.customReportTemplates,
+      templateReportBody.templateReportTemplateName,
+    );
+
+    var redneredTemplate = nunjucks.renderString(
+      templateReportToRender.content,
+      templateReportBody.templateInputs,
+    );
+    this.logger.info(redneredTemplate);
+    const markdowned = JSON.stringify(
+      new MarkdownIt().parse(redneredTemplate, undefined),
+    );
+    this.logger.info(redneredTemplate);
+
+    return (
+      await this.db.insert(this.trTableName, {
+        template_task_id: templateReportBody.templateExecutionId,
+        template_name: templateReportBody.templateName,
+        template_report_template_name: templateReportToRender.name,
+        template_report_input_body: templateReportBody.templateInputs,
+        report_rendered_content: markdowned,
+        created_by: templateReportBody.createdBy,
+      })
+    )[0];
+  }
+
+  private renderDefaultValues(templateValuesObject: any) {
+    const getCurrentUTCTime = (): string => {
+      const now = new Date();
+      return now.toDateString();
+    };
+
+    templateValuesObject['time'] = getCurrentUTCTime();
+  }
+
+  private async selectTemplateToRender(
+    objects: TemplateReportObj[],
+    name: string | undefined,
+  ): Promise<TemplateReportObj> {
+    const foundObject = objects.find(obj => obj.name === name);
+    if (foundObject) {
+      return foundObject;
+    } else {
+      return defaultTemplate;
     }
-    private readonly db: DatabaseOperations;
-    private readonly trTableName = 'tr_template_reports';
-
-    //TODO: 
-    // prepare custom action to collect yaml as input
-
-
-    public async getTemplateReportsById(id: string) {
-        this.logger.debug(`Collecting Template Report object for id: ${id}`)
-        var obj = (await this.db.select(this.trTableName, "*", { id: id }))[0]
-        return obj
-    }
-
-    public async getTemplateReportsByUser(user: string) {
-        this.logger.debug(`Collecting Template Report object for user: ${user}`)
-        var obj = (await this.db.select(this.trTableName, "*", { created_by: user }))
-        return obj
-    }
-
-    public async getTemplateReports() {
-        this.logger.debug(`Collecting Template Report - all`)
-        var obj = (await this.db.selectAll(this.trTableName, "*",))
-        return obj
-    }
-
-
-    public async generateReportForTask(templateReportBody: TemplateReport) {
-
-        this.logger.info(`Generating report for templateTask: ${templateReportBody.templateExecutionId}`)
-
-        templateReportBody.templateInputs['templateExecutionId'] = templateReportBody.templateExecutionId
-        templateReportBody.templateInputs['templateName'] = templateReportBody.templateName
-        this.renderDefaultValues(templateReportBody.templateInputs);
-
-        const templateReportToRender = await this.selectTemplateToRender(this.customReportTemplates, templateReportBody.templateReportTemplateName)
-
-        var redneredTemplate = nunjucks.renderString(templateReportToRender.content, templateReportBody.templateInputs)
-        this.logger.info(redneredTemplate)
-        const markdowned = JSON.stringify(new MarkdownIt().parse(redneredTemplate, undefined))
-        this.logger.info(redneredTemplate)
-
-        return (await this.db.insert(this.trTableName, { template_task_id: templateReportBody.templateExecutionId, template_name: templateReportBody.templateName, template_report_template_name: templateReportToRender.name, template_report_input_body: templateReportBody.templateInputs, report_rendered_content: markdowned, created_by: templateReportBody.createdBy }))[0]
-    }
-
-
-    private renderDefaultValues(templateValuesObject: any) {
-
-        const getCurrentUTCTime = (): string => {
-            const now = new Date();
-            return now.toDateString();
-        };
-
-        templateValuesObject['time'] = getCurrentUTCTime();
-    }
-
-
-    private async selectTemplateToRender(objects: TemplateReportObj[], name: string | undefined): Promise<TemplateReportObj> {
-        const foundObject = objects.find(obj => obj.name === name);
-        if (foundObject) {
-            return foundObject;
-        } else {
-            return defaultTemplate
-        }
-    }
+  }
 }

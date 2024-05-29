@@ -1,4 +1,7 @@
-import { DatabaseManager, createServiceBuilder } from '@backstage/backend-common';
+import {
+  DatabaseManager,
+  createServiceBuilder,
+} from '@backstage/backend-common';
 import { Server } from 'http';
 import { Logger } from 'winston';
 import { createRouter } from './router';
@@ -13,7 +16,9 @@ export interface ServerOptions {
 export async function startStandaloneServer(
   options: ServerOptions,
 ): Promise<Server> {
-  const logger = options.logger.child({ service: 'template-reporting-backend' });
+  const logger = options.logger.child({
+    service: 'template-reporting-backend',
+  });
   const manager = DatabaseManager.fromConfig(
     new ConfigReader({
       backend: {
@@ -25,7 +30,7 @@ export async function startStandaloneServer(
   logger.debug('Starting application server...');
   const router = await createRouter({
     logger,
-    database
+    database,
   });
 
   let service = createServiceBuilder(module)
