@@ -15,8 +15,7 @@ export const templateReportsPlugin = createPlugin({
 export const TemplateReportsPage = templateReportsPlugin.provide(
   createRoutableExtension({
     name: 'TemplateReportsPage',
-    component: () =>
-      import('./components/MainPage').then(m => m.MainPage),
+    component: () => import('./components/MainPage').then(m => m.MainPage),
     mountPoint: rootRouteRef,
   }),
 );
