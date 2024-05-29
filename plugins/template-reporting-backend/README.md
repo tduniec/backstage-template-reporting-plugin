@@ -202,7 +202,7 @@ import { createBackendModule } from '@backstage/backend-plugin-api';
 import {
   TemplateReportObj,
   templateReportingReportsExtensionPoint,
-} from '@tduniec/plugin-template-reporting-backend';
+} from '@tduniec/backstage-plugin-template-reporting-backend';
 ```
 
 ...
@@ -235,4 +235,26 @@ const templateReportingCustomExtensions = createBackendModule({
   },
 });
 backend.add(templateReportingCustomExtensions());
+```
+
+## register custom action in New Backend Scaffolder
+
+```ts
+const scaffolderModuleCustomExtensions = createBackendModule({
+  pluginId: 'scaffolder', // name of the plugin that the module is targeting
+  moduleId: 'custom-extensions',
+  register(env) {
+    env.registerInit({
+      deps: {
+        scaffolder: scaffolderActionsExtensionPoint,
+        config: coreServices.rootConfig,
+        // ... and other dependencies as needed
+      },
+      async init({ scaffolder, config /* ..., other dependencies */ }) {
+        scaffolder.addActions(generateTemplateReport(config));
+      },
+    });
+  },
+});
+backend.add(scaffolderModuleCustomExtensions());
 ```
