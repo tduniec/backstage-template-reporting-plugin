@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
-import { configApiRef, useApi } from '@backstage/core-plugin-api';
+import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import { Box, Card, Divider, Grid, Paper } from '@material-ui/core';
 import MarkdownIt from 'markdown-it';
 import { scaffolderApiRef } from '@backstage/plugin-scaffolder-react';
@@ -14,6 +14,7 @@ const DataFetchingComponent: React.FC<DataFetchingComponentProps> = ({
 }) => {
   const configApi = useApi(configApiRef);
   const scaffolderApi = useApi(scaffolderApiRef);
+  const fetchApi = useApi(fetchApiRef);
   const [data, setData] = useState<string | null>(null);
   const [fullReport, setFullReport] = useState<any | null>(null);
   const [scaffolderObj, setScaffolderObj] = useState<any | null>(null);
@@ -24,7 +25,7 @@ const DataFetchingComponent: React.FC<DataFetchingComponentProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await fetchApi.fetch(
           `${configApi.getString(
             'backend.baseUrl',
           )}/api/template-reporting/report/${templateReportId}`,

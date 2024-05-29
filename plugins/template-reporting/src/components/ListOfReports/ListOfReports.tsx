@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import {
   configApiRef,
+  fetchApiRef,
   identityApiRef,
   useApi,
 } from '@backstage/core-plugin-api';
@@ -32,6 +33,7 @@ interface TemplateReportListProps {
 const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
   const configApi = useApi(configApiRef);
   const identityApi = useApi(identityApiRef);
+  const fetchApi = useApi(fetchApiRef);
   const [data, setData] = useState<TemplateReport[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -42,13 +44,13 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
         const userId = (await identityApi.getBackstageIdentity()).userEntityRef;
         let response;
         if (!byUser) {
-          response = await fetch(
+          response = await fetchApi.fetch(
             `${configApi.getString(
               'backend.baseUrl',
             )}/api/template-reporting/report?user=${userId}`,
           );
         } else {
-          response = await fetch(
+          response = await fetchApi.fetch(
             `${configApi.getString(
               'backend.baseUrl',
             )}/api/template-reporting/report`,
