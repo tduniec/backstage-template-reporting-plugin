@@ -69,7 +69,7 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
     };
 
     fetchData();
-  }, [configApi, identityApi, byUser, error]);
+  }, [fetchApi, configApi, identityApi, byUser, error]);
 
   if (loading) {
     return <CircularProgress />;

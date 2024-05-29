@@ -58,7 +58,7 @@ const DataFetchingComponent: React.FC<DataFetchingComponentProps> = ({
     };
 
     fetchData();
-  }, [scaffolderApi, templateReportId, configApi, error]);
+  }, [fetchApi, scaffolderApi, templateReportId, configApi, error]);
 
   if (loading) {
     return <Typography variant="h6">Loading...</Typography>;
