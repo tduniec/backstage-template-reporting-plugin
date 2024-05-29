@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 export * from './service/router';
+export { templateReportingPlugin as default } from './service/router';
 
 export type ErrorRepresentation = {
   error: string;
