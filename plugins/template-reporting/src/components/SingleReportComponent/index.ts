@@ -1,0 +1,1 @@
+export { SingleReportPage } from './SinglePage';
