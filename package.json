@@ -1,6 +1,6 @@
 {
   "name": "@tduniec/backstage-template-reporting-plugin",
-  "version": "1.0.1",
+  "version": "0.1.0",
   "description": "Provides with functionality to generate customisable reports from Scaffolder template executions",
   "private": true,
   "engines": {
