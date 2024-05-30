@@ -20,6 +20,7 @@ import fetch from 'node-fetch';
 import { Config } from '@backstage/config';
 import * as yaml from 'yaml';
 import { TemplateReport } from '../..';
+import { Logger } from 'winston';
 
 function _interopDefaultLegacy(e: any) {
   return e && typeof e === 'object' && 'default' in e ? e : { default: e };
@@ -109,14 +110,15 @@ export function generateTemplateReport(config: Config) {
         templateInputs: reportInputs,
       };
       logger.info(`Publishing report for template execution: ${taskId}`);
-
+      const token =
+        collectAuthToken(config, logger) ?? ctx.secrets?.backstageToken;
       try {
         const response = await fetch(
           `http://127.0.0.1:7007/api/template-reporting/report`,
           {
             method: 'POST',
             headers: {
-              Authorization: `Bearer ${ctx.secrets?.backstageToken}`,
+              Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(body),
@@ -149,4 +151,28 @@ export function generateTemplateReport(config: Config) {
       }
     },
   });
+}
+
+function collectAuthToken(config: Config, logger: Logger) {
+  const tokenId = 'scaffolder-access-for-template-reporting';
+  try {
+    const externalAccess = config.getConfigArray('backend.auth.externalAccess');
+    const token = externalAccess
+      .find(
+        x =>
+          x.getString('type') === 'static' &&
+          x.getString('options.subject') === tokenId,
+      )
+      ?.getString('options.token');
+    if (token === undefined) {
+      const message = 'Token for new backend is undefined';
+      logger.warn(message);
+      throw new Error(message);
+    }
+    return token;
+  } catch (error) {
+    const message = `problem reading 'backend.auth.externalAccess' config: entry with ${tokenId} does not exist or there was problem reading the config. Switching to 'ctx.secrets.backstageToken'`;
+    logger.error(message);
+    return undefined;
+  }
 }
