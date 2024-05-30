@@ -12,10 +12,9 @@ https://github.com/tduniec/backstage-template-reporting-plugin.git
 
 ## Screens
 
-![Screenshot of the AllStats plugin Charts](https://raw.githubusercontent.com/tduniec/backstage-timesaver-plugin/main/plugins/time-saver/docs/tsAllStats.png)
-![Screenshot of the AllStats2 plugin Charts](https://raw.githubusercontent.com/tduniec/backstage-timesaver-plugin/main/plugins/time-saver/docs/tsAllStats2.png)
-![Screenshot of the ByTeam plugin Charts](https://raw.githubusercontent.com/tduniec/backstage-timesaver-plugin/main/plugins/time-saver/docs/tsByTeam.png)
-![Screenshot of the ByTemplate plugin Charts](https://raw.githubusercontent.com/tduniec/backstage-timesaver-plugin/main/plugins/time-saver/docs/tsByTemplate.png)
+![Screenshot of the SingleReportPage](https://raw.githubusercontent.com/tduniec/backstage-template-reporting-plugin/main/plugins/template-reporting/docs/SingleReportView.png)
+![Screenshot of TemplateOutputs](https://raw.githubusercontent.com/tduniec/backstage-template-reporting-plugin/main/plugins/template-reporting/docs/TemplateOutput.png)
+![Screenshot of ReportListPage](https://raw.githubusercontent.com/tduniec/backstage-template-reporting-plugin/main/plugins/template-reporting/docs/ReportListPageAll.png)
 
 ## Installation
 
