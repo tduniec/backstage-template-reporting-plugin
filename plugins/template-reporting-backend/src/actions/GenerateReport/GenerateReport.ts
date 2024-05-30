@@ -172,7 +172,7 @@ function collectAuthToken(config: Config, logger: Logger) {
     return token;
   } catch (error) {
     const message = `problem reading 'backend.auth.externalAccess' config: entry with ${tokenId} does not exist or there was problem reading the config. Switching to 'ctx.secrets.backstageToken'`;
-    logger.error(message);
+    logger.warn(message);
     return undefined;
   }
 }

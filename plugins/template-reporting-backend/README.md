@@ -258,3 +258,17 @@ const scaffolderModuleCustomExtensions = createBackendModule({
 });
 backend.add(scaffolderModuleCustomExtensions());
 ```
+
+## register externallAccess token to connect to template-reporting API
+
+```yaml
+backend:
+  auth:
+    externalAccess:
+      - type: static
+        options:
+          token: ${YOUR_TOKEN}
+          subject: scaffolder-access-for-template-reporting # should be this subject value configured
+```
+
+This is required configuration for new backend. If this will not be found it will fallback for ctx.secrets.backstageToken which will cause Error 401 Unauthorized, but in old backend system the access will be authorized.
