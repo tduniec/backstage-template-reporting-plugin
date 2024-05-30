@@ -16,6 +16,3 @@ The Backstage Template-Reporting Plugin is designed to generate reports from tem
 ## Installation
 
 Please follow the instructions in each plugin README.md
-
-
-
