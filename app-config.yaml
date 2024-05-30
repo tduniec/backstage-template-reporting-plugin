@@ -22,3 +22,10 @@ backend:
   reading:
     allow:
       - host: localhost
+
+  auth:
+    externalAccess:
+      - type: static
+        options:
+          token: ${TEMPLATE_REPORTING_ACCESS_TOKEN}
+          subject: scaffolder-access-for-template-reporting

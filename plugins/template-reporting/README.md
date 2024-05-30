@@ -47,17 +47,13 @@ yarn add --cwd packages/app @tduniec/backstage-plugin-template-reporting
 6. We want to add this icon import after all the existing import statements:
 
    ```ts
-   import SummarizeIcon from '@mui/icons-material/Summarize';
+   import Pages from '@material-ui/icons/Pages';
    ```
 
 7. Then add this line just after the `<SidebarSettings />` line:
 
    ```ts
-   <SidebarItem
-     icon={SummarizeIcon}
-     to="template-reporting"
-     text="templateReporting"
-   />
+   <SidebarItem icon={Pages} to="template-reporting" text="templateReporting" />
    ```
 
 8. Now run `yarn dev` from the root of your project and you should see the DevTools option show up just below Settings in your sidebar and clicking on it will get you to the [Info tab](#info)
