@@ -1,0 +1,9 @@
+---
+title: Template Reporting
+author: tduniec
+authorUrl: https://github.com/tduniec
+category: Discovery
+description: The Backstage Template-Reporting Plugin is designed to generate reports from template executions within Backstage.
+iconUrl: https://raw.githubusercontent.com/tduniec/backstage-template-reporting-plugin/main/img/trLogo.png
+npmPackageName: '@tduniec/backstage-plugin-template-reporting'
+addedDate: 2024-05-30
