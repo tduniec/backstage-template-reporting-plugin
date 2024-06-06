@@ -4,8 +4,8 @@ The Backstage Template-Reporting Plugin is designed to generate reports from tem
 
 ## Repos
 
-- [template-reporting](./plugins/template-reporitng)
-- [template-reporting-backend](./plugins/template-reporitng-backend)
+- [template-reporting](./plugins/template-reporting)
+- [template-reporting-backend](./plugins/template-reporting-backend)
 
 ## Screens
 
