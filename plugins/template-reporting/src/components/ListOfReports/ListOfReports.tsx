@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import {
   configApiRef,
   fetchApiRef,
@@ -16,6 +15,8 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import TableBody from '@mui/material/TableBody';
 import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
 
 interface TemplateReport {
   id: string;
@@ -37,6 +38,13 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
   const [data, setData] = useState<TemplateReport[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [filter, setFilter] = useState('');
+
+  const handleFilterChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setFilter(event.target.value);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,14 +70,26 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
         const result: TemplateReport[] = await response.json();
         setData(result);
       } catch (err) {
-        setError(error as Error);
+        setError(err as Error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [fetchApi, configApi, identityApi, byUser, error]);
+  }, [fetchApi, configApi, identityApi, byUser]);
+
+  const filteredData = data.filter(report => {
+    return (
+      report.id.toLowerCase().includes(filter.toLowerCase()) ||
+      new Date(report.created_at)
+        .toLocaleString()
+        .toLowerCase()
+        .includes(filter.toLowerCase()) ||
+      report.template_name.toLowerCase().includes(filter.toLowerCase()) ||
+      report.created_by.toLowerCase().includes(filter.toLowerCase())
+    );
+  });
 
   if (loading) {
     return <CircularProgress />;
@@ -81,6 +101,14 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
 
   return (
     <Container>
+      <TextField
+        fullWidth
+        label="Filter"
+        variant="outlined"
+        value={filter}
+        onChange={handleFilterChange}
+        style={{ marginBottom: '20px' }}
+      />
       <Typography variant="h4" gutterBottom>
         Template Reports
       </Typography>
@@ -95,17 +123,16 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map(report => (
+            {filteredData.map(report => (
               <TableRow key={report.id}>
                 <TableCell>
-                  <a
+                  <Link
                     href={`${configApi.getString(
                       'app.baseUrl',
                     )}/template-reporting/${report.id}`}
-                    style={{ textDecoration: 'none', color: 'inherit' }}
                   >
                     {report.id}
-                  </a>
+                  </Link>
                 </TableCell>
                 <TableCell>
                   {new Date(report.created_at).toLocaleString()}

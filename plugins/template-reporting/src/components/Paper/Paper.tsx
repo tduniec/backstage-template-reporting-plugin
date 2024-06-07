@@ -80,6 +80,14 @@ const DataFetchingComponent: React.FC<DataFetchingComponentProps> = ({
         <Grid container spacing={0}>
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6">
+              <b>Template Task ID:</b>
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography>{fullReport.template_task_id}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6">
               <b>Template Name:</b>
             </Typography>
           </Grid>
@@ -88,12 +96,15 @@ const DataFetchingComponent: React.FC<DataFetchingComponentProps> = ({
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6">
-              <b>Template Task ID:</b>
+              <b>Template title:</b>
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Typography>{fullReport.template_task_id}</Typography>
+            <Typography>
+              {scaffolderObj.spec.templateInfo.entity.metadata.title}
+            </Typography>
           </Grid>
+
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6">
               <b>Created by:</b>
@@ -108,7 +119,13 @@ const DataFetchingComponent: React.FC<DataFetchingComponentProps> = ({
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Typography style={{ color: statusColor }}>
+            <Typography
+              style={{
+                color: statusColor,
+                fontWeight: 'bold',
+                textTransform: 'uppercase',
+              }}
+            >
               {scaffolderObj.status}
             </Typography>
           </Grid>
