@@ -240,6 +240,18 @@ backend.add(templateReportingCustomExtensions());
 ## register custom action in New Backend Scaffolder
 
 ```ts
+import {
+  TemplateReportObj,
+  templateReportingReportsExtensionPoint,
+  generateTemplateReport,
+} from '@tduniec/backstage-plugin-template-reporting-backend';
+import { coreServices } from '@backstage/backend-plugin-api';
+import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
+```
+
+...
+
+```ts
 const scaffolderModuleCustomExtensions = createBackendModule({
   pluginId: 'scaffolder', // name of the plugin that the module is targeting
   moduleId: 'custom-extensions',
