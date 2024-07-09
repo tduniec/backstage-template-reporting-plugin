@@ -15,7 +15,12 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "backend-plugin"
+    "role": "backend-plugin",
+    "pluginId": "template-reporting",
+    "pluginPackages": [
+      "@tduniec/backstage-plugin-template-reporting",
+      "@tduniec/backstage-plugin-template-reporting-backend"
+    ]
   },
   "scripts": {
     "start": "backstage-cli package start",
