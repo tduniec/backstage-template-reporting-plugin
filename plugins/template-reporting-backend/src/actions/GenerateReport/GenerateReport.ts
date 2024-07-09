@@ -21,6 +21,7 @@ import { Config } from '@backstage/config';
 import * as yaml from 'yaml';
 import { TemplateReport } from '../..';
 import { Logger } from 'winston';
+import { AuthService } from '@backstage/backend-plugin-api';
 
 function _interopDefaultLegacy(e: any) {
   return e && typeof e === 'object' && 'default' in e ? e : { default: e };
@@ -75,7 +76,10 @@ const exampleUsage = [
   },
 ];
 
-export function generateTemplateReport(config: Config) {
+export async function generateTemplateReport(
+  config: Config,
+  auth?: AuthService,
+) {
   // For more information on how to define custom actions, see
   //   https://backstage.io/docs/features/software-templates/writing-custom-actions
 
@@ -111,7 +115,7 @@ export function generateTemplateReport(config: Config) {
       };
       logger.info(`Publishing report for template execution: ${taskId}`);
       const token =
-        collectAuthToken(config, logger) ?? ctx.secrets?.backstageToken;
+        (await collectAuthToken(logger, auth)) ?? ctx.secrets?.backstageToken;
       try {
         const response = await fetch(
           `http://127.0.0.1:7007/api/template-reporting/report`,
@@ -153,25 +157,16 @@ export function generateTemplateReport(config: Config) {
   });
 }
 
-function collectAuthToken(config: Config, logger: Logger) {
-  const tokenId = 'scaffolder-access-for-template-reporting';
+async function collectAuthToken(logger: Logger, auth?: AuthService) {
   try {
-    const externalAccess = config.getConfigArray('backend.auth.externalAccess');
-    const token = externalAccess
-      .find(
-        x =>
-          x.getString('type') === 'static' &&
-          x.getString('options.subject') === tokenId,
-      )
-      ?.getString('options.token');
-    if (token === undefined) {
-      const message = 'Token for new backend is undefined';
-      logger.warn(message);
-      throw new Error(message);
-    }
+    const token =
+      (await auth?.getPluginRequestToken({
+        onBehalfOf: await auth?.getOwnServiceCredentials(),
+        targetPluginId: 'template-reporting',
+      })) ?? undefined;
     return token;
   } catch (error) {
-    const message = `problem reading 'backend.auth.externalAccess' config: entry with ${tokenId} does not exist or there was problem reading the config. Switching to 'ctx.secrets.backstageToken'`;
+    const message = `Problem collecting token for new backend system`;
     logger.warn(message);
     return undefined;
   }
