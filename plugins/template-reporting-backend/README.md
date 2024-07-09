@@ -260,27 +260,16 @@ const scaffolderModuleCustomExtensions = createBackendModule({
       deps: {
         scaffolder: scaffolderActionsExtensionPoint,
         config: coreServices.rootConfig,
+        auth: coreServices.auth,
         // ... and other dependencies as needed
       },
-      async init({ scaffolder, config /* ..., other dependencies */ }) {
-        scaffolder.addActions(generateTemplateReport(config));
+      async init({ scaffolder, config, auth /* ..., other dependencies */ }) {
+        // Here you have the opportunity to interact with the extension
+        // point before the plugin itself gets instantiated
+        scaffolder.addActions(await generateTemplateReport(config, auth)); // just an example
       },
     });
   },
 });
 backend.add(scaffolderModuleCustomExtensions());
 ```
-
-## register externallAccess token to connect to template-reporting API
-
-```yaml
-backend:
-  auth:
-    externalAccess:
-      - type: static
-        options:
-          token: ${YOUR_TOKEN}
-          subject: scaffolder-access-for-template-reporting # should be this subject value configured
-```
-
-This is required configuration for new backend. If this will not be found it will fallback for ctx.secrets.backstageToken which will cause Error 401 Unauthorized, but in old backend system the access will be authorized.
