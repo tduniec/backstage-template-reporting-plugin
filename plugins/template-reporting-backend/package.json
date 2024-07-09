@@ -27,10 +27,10 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage/backend-common": "^0.19.9",
-    "@backstage/backend-plugin-api": "^0.6.18",
-    "@backstage/config": "^1.1.1",
-    "@backstage/plugin-scaffolder-node": "^0.4.4",
+    "@backstage/backend-common": "^0.23.2",
+    "@backstage/backend-plugin-api": "^0.6.21",
+    "@backstage/config": "^1.2.0",
+    "@backstage/plugin-scaffolder-node": "^0.4.7",
     "@types/express": "*",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
@@ -44,7 +44,7 @@
     "yn": "^4.0.0"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.25.1",
+    "@backstage/cli": "^0.26.10",
     "@types/markdown-it": "^14.1.1",
     "@types/nunjucks": "^3.2.6",
     "@types/supertest": "^2.0.12",
