@@ -143,6 +143,7 @@ export async function generateTemplateReport(
               responseJson.id
             }`,
           );
+          ctx.output('content', responseJson.report_rendered_content);
         } else {
           ctx.logger.error(
             `problem retriving proper response: ${JSON.stringify(
@@ -164,7 +165,7 @@ async function collectAuthToken(logger: Logger, auth?: AuthService) {
         onBehalfOf: await auth?.getOwnServiceCredentials(),
         targetPluginId: 'template-reporting',
       })) ?? undefined;
-    return token;
+    return token?.token;
   } catch (error) {
     const message = `Problem collecting token for new backend system`;
     logger.warn(message);
