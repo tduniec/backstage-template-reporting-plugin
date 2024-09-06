@@ -143,6 +143,7 @@ export async function generateTemplateReport(
               responseJson.id
             }`,
           );
+          ctx.output('content', responseJson.report_rendered_content);
         } else {
           ctx.logger.error(
             `problem retriving proper response: ${JSON.stringify(

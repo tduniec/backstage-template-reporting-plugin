@@ -17,3 +17,8 @@ export const reportUrl = {
   title: 'reportUrl',
   type: 'string',
 };
+
+export const content = {
+  title: 'content',
+  type: 'string',
+};
