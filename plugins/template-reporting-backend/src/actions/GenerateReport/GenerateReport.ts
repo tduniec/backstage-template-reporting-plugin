@@ -151,7 +151,7 @@ export async function generateTemplateReport(
             undefined,
           );
           ctx.output('htmlContent', renered);
-          const markdown = new TurndownService().turndown(renered)
+          const markdown = new TurndownService().turndown(renered);
           ctx.output('markdownContent', markdown);
         } else {
           ctx.logger.error(
