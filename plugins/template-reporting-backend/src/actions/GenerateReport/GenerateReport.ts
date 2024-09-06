@@ -165,7 +165,7 @@ async function collectAuthToken(logger: Logger, auth?: AuthService) {
         onBehalfOf: await auth?.getOwnServiceCredentials(),
         targetPluginId: 'template-reporting',
       })) ?? undefined;
-    return token;
+    return token?.token;
   } catch (error) {
     const message = `Problem collecting token for new backend system`;
     logger.warn(message);
