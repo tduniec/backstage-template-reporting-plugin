@@ -23,6 +23,7 @@ import { TemplateReport } from '../..';
 import { Logger } from 'winston';
 import { AuthService } from '@backstage/backend-plugin-api';
 import MarkdownIt from 'markdown-it';
+import TurndownService from 'turndown';
 
 function _interopDefaultLegacy(e: any) {
   return e && typeof e === 'object' && 'default' in e ? e : { default: e };
@@ -149,7 +150,9 @@ export async function generateTemplateReport(
             {},
             undefined,
           );
-          ctx.output('content', renered);
+          ctx.output('htmlContent', renered);
+          const markdown = new TurndownService().turndown(renered);
+          ctx.output('markdownContent', markdown);
         } else {
           ctx.logger.error(
             `problem retriving proper response: ${JSON.stringify(

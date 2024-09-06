@@ -18,7 +18,12 @@ export const reportUrl = {
   type: 'string',
 };
 
-export const content = {
-  title: 'content',
+export const htmlContent = {
+  title: 'htmlContent',
+  type: 'string',
+};
+
+export const markdownContent = {
+  title: 'markdownContent',
   type: 'string',
 };
