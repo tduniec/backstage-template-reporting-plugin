@@ -91,6 +91,7 @@ export async function generateTemplateReport(
   }>({
     id: actionId,
     examples: exampleUsage,
+    supportsDryRun: true,
     description: 'Http call retruning response',
     schema: {
       input: {
