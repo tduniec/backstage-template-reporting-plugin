@@ -36,7 +36,11 @@ export function setupCommonRoutes(
   });
 
   router.post('/report', async (request, response) => {
-    const res = await apiHandler.generateReportForTask(request.body);
+    const dryRunInput = request.query.dryrun;
+    const res = await apiHandler.generateReportForTask(
+      request.body,
+      dryRunInput === 'true' ? true : false,
+    );
     response.json(res).status(201);
   });
 

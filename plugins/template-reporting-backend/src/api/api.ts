@@ -55,7 +55,10 @@ export class TrApi {
     return obj;
   }
 
-  public async generateReportForTask(templateReportBody: TemplateReport) {
+  public async generateReportForTask(
+    templateReportBody: TemplateReport,
+    dryRun: boolean = false,
+  ) {
     this.logger.info(
       `Generating report for templateTask: ${templateReportBody.templateExecutionId}`,
     );
@@ -80,6 +83,11 @@ export class TrApi {
       new MarkdownIt().parse(redneredTemplate, undefined),
     );
     this.logger.info(redneredTemplate);
+
+    if (dryRun) {
+      this.logger.info('Using dry-run mode here:');
+      return { id: undefined, report_rendered_content: markdowned };
+    }
 
     return (
       await this.db.insert(this.trTableName, {

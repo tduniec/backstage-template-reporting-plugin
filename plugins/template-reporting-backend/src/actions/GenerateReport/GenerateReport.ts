@@ -78,6 +78,8 @@ const exampleUsage = [
   },
 ];
 
+const generateReportUrl = `http://127.0.0.1:7007/api/template-reporting/report`;
+
 export async function generateTemplateReport(
   config: Config,
   auth?: AuthService,
@@ -109,6 +111,10 @@ export async function generateTemplateReport(
       const { reportTemplateName, reportInputs } = ctx.input;
       const taskId = ctx.workspacePath.split('/').pop();
 
+      const URL = !ctx.isDryRun
+        ? generateReportUrl
+        : `${generateReportUrl}?dryrun=true`;
+
       const body: TemplateReport = {
         templateName: ctx.templateInfo?.entity?.metadata.name as string,
         templateExecutionId: taskId as string,
@@ -120,17 +126,14 @@ export async function generateTemplateReport(
       const token =
         (await collectAuthToken(logger, auth)) ?? ctx.secrets?.backstageToken;
       try {
-        const response = await fetch(
-          `http://127.0.0.1:7007/api/template-reporting/report`,
-          {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
+        const response = await fetch(URL, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
-        );
+          body: JSON.stringify(body),
+        });
         if (response.ok) {
           console.log(response);
           let responseJson = null;
