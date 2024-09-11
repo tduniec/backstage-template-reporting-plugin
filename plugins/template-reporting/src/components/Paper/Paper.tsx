@@ -4,6 +4,20 @@ import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import { Box, Card, Divider, Grid, Paper } from '@material-ui/core';
 import MarkdownIt from 'markdown-it';
 import { scaffolderApiRef } from '@backstage/plugin-scaffolder-react';
+import styled from 'styled-components';
+
+const StyledCard = styled(Card)`
+  table {
+    border-collapse: collapse;
+    text-align: center;
+  }
+
+  th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center !important;
+  }
+`;
 
 interface DataFetchingComponentProps {
   templateReportId: string;
@@ -134,9 +148,9 @@ const DataFetchingComponent: React.FC<DataFetchingComponentProps> = ({
       <Divider />
       <br />
       <br />
-      <Card variant="outlined">
+      <StyledCard variant="outlined">
         <div dangerouslySetInnerHTML={{ __html: data as string }} />
-      </Card>
+      </StyledCard>
     </Box>
   );
 };
