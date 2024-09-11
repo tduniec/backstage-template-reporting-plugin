@@ -12,7 +12,8 @@ const StyledCard = styled(Card)`
     text-align: center;
   }
 
-  th, td {
+  th,
+  td {
     border: 1px solid black;
     padding: 8px;
     text-align: center !important;
