@@ -24,6 +24,7 @@ import { Logger } from 'winston';
 import { AuthService } from '@backstage/backend-plugin-api';
 import MarkdownIt from 'markdown-it';
 import TurndownService from 'turndown';
+// @ts-ignore
 import { gfm } from 'turndown-plugin-gfm';
 
 function _interopDefaultLegacy(e: any) {
