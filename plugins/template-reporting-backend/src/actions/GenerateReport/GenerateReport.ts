@@ -156,8 +156,8 @@ export async function generateTemplateReport(
             undefined,
           );
           ctx.output('htmlContent', renered);
-          const td = new TurndownService()
-          td.use(gfm)
+          const td = new TurndownService();
+          td.use(gfm);
           const markdown = td.turndown(renered);
           ctx.output('markdownContent', markdown);
         } else {
