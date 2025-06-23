@@ -17,6 +17,8 @@ import TableBody from '@mui/material/TableBody';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 interface TemplateReport {
   id: string;
@@ -39,11 +41,16 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [filter, setFilter] = useState('');
+  const [latestFirst, setLatestFirst] = useState(true);
 
   const handleFilterChange = (event: {
     target: { value: React.SetStateAction<string> };
   }) => {
     setFilter(event.target.value);
+  };
+
+  const handleToggleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLatestFirst(event.target.checked);
   };
 
   useEffect(() => {
@@ -91,6 +98,14 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
     );
   });
 
+  const displayedData = latestFirst
+    ? filteredData.slice().sort((a, b) => {
+        const dateA = new Date(a.created_at).getTime();
+        const dateB = new Date(b.created_at).getTime();
+        return dateB - dateA;
+      })
+    : filteredData;
+
   if (loading) {
     return <CircularProgress />;
   }
@@ -109,6 +124,11 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
         onChange={handleFilterChange}
         style={{ marginBottom: '20px' }}
       />
+      <FormControlLabel
+        control={<Switch checked={latestFirst} onChange={handleToggleChange} />}
+        label="Show latest first"
+        style={{ marginBottom: '20px' }}
+      />
       <Typography variant="h4" gutterBottom>
         Template Reports
       </Typography>
@@ -123,7 +143,7 @@ const TemplateReportList: React.FC<TemplateReportListProps> = ({ byUser }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData.map(report => (
+            {displayedData.map(report => (
               <TableRow key={report.id}>
                 <TableCell>
                   <Link
